@@ -34,6 +34,32 @@
             </button>
         </div>
 
+        <!-- Shot Count (strip only) -->
+        <div class="shot-count-row" id="shot-count-row" style="display:none;">
+            <p class="section-label" style="margin:0 10px 0 0;">Shots</p>
+            <div class="shot-count-picker">
+                <button class="shot-btn active" data-count="3">
+                    <span class="shot-visual">
+                        <span></span><span></span><span></span>
+                    </span>
+                    <span class="shot-label">3</span>
+                </button>
+                <button class="shot-btn" data-count="4">
+                    <span class="shot-visual">
+                        <span></span><span></span><span></span><span></span>
+                    </span>
+                    <span class="shot-label">4</span>
+                </button>
+                <button class="shot-btn" data-count="6">
+                    <span class="shot-visual six">
+                        <span></span><span></span><span></span>
+                        <span></span><span></span><span></span>
+                    </span>
+                    <span class="shot-label">6</span>
+                </button>
+            </div>
+        </div>
+
         <!-- Camera Section -->
         <div class="camera-wrapper">
             <div class="camera-section">
@@ -46,11 +72,7 @@
                 <div class="vf-corner vf-tr"></div>
                 <div class="vf-corner vf-bl"></div>
                 <div class="vf-corner vf-br"></div>
-                <div class="strip-progress" id="strip-progress" style="display:none;">
-                    <span class="dot" id="dot-0"></span>
-                    <span class="dot" id="dot-1"></span>
-                    <span class="dot" id="dot-2"></span>
-                </div>
+                <div class="strip-progress" id="strip-progress" style="display:none;"></div>
             </div>
         </div>
 
@@ -108,7 +130,7 @@
 
         <canvas id="canvas" style="display:none;"></canvas>
 
-        <!-- Output: Single Photo -->
+        <!-- Output: Single -->
         <div class="output-section" id="output-single" style="display:none;">
             <div id="single-frame-container"></div>
             <div class="output-actions">
@@ -118,7 +140,7 @@
             </div>
         </div>
 
-        <!-- Output: Film Strip -->
+        <!-- Output: Strip -->
         <div class="output-section" id="output-strip" style="display:none;">
             <div id="strip-frame-container"></div>
             <div class="output-actions">
