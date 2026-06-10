@@ -349,75 +349,62 @@ function resetOutput() {
 retakeBtn.addEventListener('click', resetOutput);
 stripRetakeBtn.addEventListener('click', () => { resetOutput(); });
 
-downloadBtn.addEventListener('click', () => {
-    if (!lastSingleImg) return;
-    const a = document.createElement('a');
-    a.href = lastSingleImg;
-    a.download = `imahe-${Date.now()}.jpg`;
-    a.click();
-});
-
+// Updated Single Download — snapshots the HTML frame
 downloadBtn.addEventListener('click', async () => {
     if (!lastSingleImg) return;
+    
+    // Optional: Visual feedback while generating
+    const originalText = downloadBtn.textContent;
+    downloadBtn.textContent = 'Saving...';
+    downloadBtn.disabled = true;
 
-    const framedPhoto = singleContainer.firstElementChild;
-    const exportCanvas = await html2canvas(framedPhoto, {
-        backgroundColor: null,
-        scale: 3
-    });
+    try {
+        const frameElement = singleContainer.firstElementChild;
+        const generatedCanvas = await html2canvas(frameElement, {
+            scale: 2, // Multiplier for higher resolution output
+            useCORS: true, // Allows cross-origin images/fonts
+            backgroundColor: null // Keeps transparency if applicable
+        });
 
-    const a = document.createElement('a');
-    a.href = exportCanvas.toDataURL('image/jpeg', 0.92);
-    a.download = `imahe-${Date.now()}.jpg`;
-    a.click();
+        const a = document.createElement('a');
+        a.href = generatedCanvas.toDataURL('image/jpeg', 0.92);
+        a.download = `imahe-${Date.now()}.jpg`;
+        a.click();
+    } catch (err) {
+        console.error("Error saving photo:", err);
+    } finally {
+        downloadBtn.textContent = originalText;
+        downloadBtn.disabled = false;
+    }
 });
+
+// Updated Strip Download — snapshots the HTML strip frame
+stripDownloadBtn.addEventListener('click', async () => {
+    const n = stripImages.length;
+    if (n === 0) return;
+
+    const originalText = stripDownloadBtn.textContent;
+    stripDownloadBtn.textContent = 'Saving...';
+    stripDownloadBtn.disabled = true;
+
+    try {
+        const frameElement = stripContainer.firstElementChild;
+        const generatedCanvas = await html2canvas(frameElement, {
+            scale: 2,
+            useCORS: true,
+            backgroundColor: null
+        });
+
+        const a = document.createElement('a');
+        a.href = generatedCanvas.toDataURL('image/jpeg', 0.92);
+        a.download = `imahe-strip-${n}shot-${Date.now()}.jpg`;
+        a.click();
+    } catch (err) {
+        console.error("Error saving strip:", err);
+    } finally {
+        stripDownloadBtn.textContent = originalText;
+        stripDownloadBtn.disabled = false;
     }
-
-    const off = document.createElement('canvas');
-    off.width = W; off.height = H;
-    const oc = off.getContext('2d');
-
-    // Background
-    oc.fillStyle = '#1C1611';
-    oc.fillRect(0, 0, W, H);
-
-    // Sprocket holes
-    oc.fillStyle = '#0C0806';
-    const holeRows = Math.max(n+3, 6);
-    for (const side of [hp/2-6, W-hp/2-6]) {
-        for (let j = 1; j <= holeRows; j++) {
-            const hy = j * (H/(holeRows+1));
-            oc.beginPath();
-            if (oc.roundRect) oc.roundRect(side, hy-7, 12, 14, 2);
-            else oc.rect(side, hy-7, 12, 14);
-            oc.fill();
-        }
-    }
-
-    // Draw images
-    for (let i = 0; i < n; i++) {
-        const img = new Image();
-        img.src = stripImages[i];
-        await new Promise(r => { img.onload = r; });
-        const p = positions[i];
-        oc.drawImage(img, p.x, p.y, p.w, p.h);
-    }
-
-    // Watermark label
-    oc.save();
-    oc.translate(W - hp/2 + 2, H/2);
-    oc.rotate(-Math.PI/2);
-    oc.fillStyle = '#4A3A2E';
-    oc.font = 'bold 11px sans-serif';
-    oc.letterSpacing = '3px';
-    oc.textAlign = 'center';
-    oc.fillText(`IMAHE · ${formatDate()}`, 0, 0);
-    oc.restore();
-
-    const a = document.createElement('a');
-    a.href = off.toDataURL('image/jpeg', 0.92);
-    a.download = `imahe-strip-${n}shot-${Date.now()}.jpg`;
-    a.click();
 });
 
 printBtn.addEventListener('click', () => window.print());
