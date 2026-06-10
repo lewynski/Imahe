@@ -5,29 +5,112 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Imahe Photobooth</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div class="grain-overlay"></div>
+
     <div class="app-container">
-        <div class="header-titles">
-            <h1 style="margin-bottom: 5px;">Imahe</h1>
-            <p style="margin-top: 0; color: #8A7B6C; font-size: 14px;">Capture your cozy moments</p>
-        </div>
-        
-        <div class="camera-section">
-            <video id="camera-feed" autoplay playsinline></video>
+
+        <!-- Header -->
+        <header class="header">
+            <div class="header-brand">
+                <span class="brand-mark">✦</span>
+                <h1>Imahe</h1>
+                <span class="brand-mark">✦</span>
+            </div>
+            <p class="tagline">capture your cozy moments</p>
+        </header>
+
+        <!-- Mode Selector -->
+        <div class="mode-selector">
+            <button class="mode-btn active" data-mode="single">
+                <span class="mode-icon">⬜</span>
+                <span>Single</span>
+            </button>
+            <button class="mode-btn" data-mode="strip">
+                <span class="mode-icon">⬛⬛⬛</span>
+                <span>Film Strip</span>
+            </button>
         </div>
 
+        <!-- Camera Section -->
+        <div class="camera-wrapper">
+            <div class="camera-section">
+                <video id="camera-feed" autoplay playsinline></video>
+                <!-- Countdown overlay -->
+                <div class="countdown-overlay" id="countdown-overlay">
+                    <span id="countdown-number"></span>
+                </div>
+                <!-- Flash overlay -->
+                <div class="flash-overlay" id="flash-overlay"></div>
+                <!-- Viewfinder corners -->
+                <div class="vf-corner vf-tl"></div>
+                <div class="vf-corner vf-tr"></div>
+                <div class="vf-corner vf-bl"></div>
+                <div class="vf-corner vf-br"></div>
+                <!-- Strip progress dots -->
+                <div class="strip-progress" id="strip-progress" style="display:none;">
+                    <span class="dot" id="dot-0"></span>
+                    <span class="dot" id="dot-1"></span>
+                    <span class="dot" id="dot-2"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Row -->
+        <div class="filter-bar" id="filter-bar">
+            <button class="filter-btn active" data-filter="none">Normal</button>
+            <button class="filter-btn" data-filter="warm">Warm</button>
+            <button class="filter-btn" data-filter="cool">Cool</button>
+            <button class="filter-btn" data-filter="mono">Mono</button>
+            <button class="filter-btn" data-filter="fade">Fade</button>
+        </div>
+
+        <!-- Controls -->
         <div class="controls">
-            <button id="capture-btn">Take Photo</button>
-            <button id="print-btn" style="display: none;">Print Photo</button>
+            <button id="capture-btn" class="btn-primary">
+                <span class="shutter-icon"></span>
+                <span id="btn-label">Take Photo</span>
+            </button>
         </div>
 
-        <canvas id="canvas" style="display: none;"></canvas>
+        <canvas id="canvas" style="display:none;"></canvas>
 
-        <div class="output-section">
-            <img id="final-photo" src="" alt="Your final photo" style="display: none;">
+        <!-- Output: Single Photo -->
+        <div class="output-section" id="output-single" style="display:none;">
+            <div class="polaroid" id="polaroid-frame">
+                <img id="final-photo" src="" alt="Your captured photo">
+                <div class="polaroid-caption">
+                    <span id="photo-date"></span>
+                    <em>imahe</em>
+                </div>
+            </div>
+            <div class="output-actions">
+                <button class="btn-secondary" id="retake-btn">Retake</button>
+                <button class="btn-primary" id="download-btn">Save Photo</button>
+                <button class="btn-secondary" id="print-btn">Print</button>
+            </div>
         </div>
+
+        <!-- Output: Film Strip -->
+        <div class="output-section" id="output-strip" style="display:none;">
+            <div class="film-strip" id="film-strip">
+                <div class="film-holes left">
+                    <span></span><span></span><span></span><span></span><span></span><span></span>
+                </div>
+                <div class="strip-frames" id="strip-frames"></div>
+                <div class="film-holes right">
+                    <span></span><span></span><span></span><span></span><span></span><span></span>
+                </div>
+            </div>
+            <div class="output-actions">
+                <button class="btn-secondary" id="strip-retake-btn">Retake Strip</button>
+                <button class="btn-primary" id="strip-download-btn">Save Strip</button>
+                <button class="btn-secondary" id="strip-print-btn">Print</button>
+            </div>
+        </div>
+
     </div>
 
     <script src="script.js"></script>
