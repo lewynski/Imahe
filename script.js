@@ -357,30 +357,20 @@ downloadBtn.addEventListener('click', () => {
     a.click();
 });
 
-// Strip download — composites all N images into a film strip canvas
-stripDownloadBtn.addEventListener('click', async () => {
-    const n = stripImages.length;
-    if (n === 0) return;
+downloadBtn.addEventListener('click', async () => {
+    if (!lastSingleImg) return;
 
-    const fw = 400, fh = 300, pad = 10, hp = 28;
+    const framedPhoto = singleContainer.firstElementChild;
+    const exportCanvas = await html2canvas(framedPhoto, {
+        backgroundColor: null,
+        scale: 3
+    });
 
-    let W, H, positions;
-
-    if (n <= 4) {
-        // Vertical strip
-        W = fw + hp*2 + pad*2;
-        H = fh*n + pad*(n+1);
-        positions = stripImages.map((_,i) => ({ x: hp+pad, y: pad+i*(fh+pad), w: fw, h: fh }));
-    } else {
-        // 2-column grid (6 shots = 3 rows × 2 cols)
-        const cols = 2, rows = Math.ceil(n/2);
-        const cellW = fw/2 - pad/2;
-        W = fw + hp*2 + pad*2;
-        H = fh/1.5*rows + pad*(rows+1);
-        positions = stripImages.map((_,i) => {
-            const col = i % cols, row = Math.floor(i/cols);
-            return { x: hp+pad + col*(cellW+pad), y: pad+row*(fh/1.5+pad), w: cellW, h: fh/1.5 };
-        });
+    const a = document.createElement('a');
+    a.href = exportCanvas.toDataURL('image/jpeg', 0.92);
+    a.download = `imahe-${Date.now()}.jpg`;
+    a.click();
+});
     }
 
     const off = document.createElement('canvas');
