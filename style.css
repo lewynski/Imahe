@@ -1,133 +1,506 @@
+/* ============================================================
+   IMAHE — Enhanced Photobooth
+   ============================================================ */
+
 :root {
-    --bg-color: #FDFBF7; /* Warm cream */
-    --text-color: #4A3F35; /* Deep mocha */
-    --accent-color: #D4A373; /* Soft caramel */
+    --cream:       #FDFBF7;
+    --paper:       #F5F1EA;
+    --mocha:       #4A3F35;
+    --mocha-light: #8A7B6C;
+    --caramel:     #D4A373;
+    --caramel-dk:  #B8864F;
+    --warm-white:  #FFFEF9;
+    --film-dark:   #1C1611;
+    --shadow:      rgba(74, 63, 53, 0.12);
+    --radius-card: 20px;
+    --radius-btn:  50px;
 }
+
+/* ── Reset & Base ─────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
 
 body {
     font-family: 'Quicksand', sans-serif;
-    background-color: var(--bg-color);
-    color: var(--text-color);
+    background-color: var(--paper);
+    background-image:
+        radial-gradient(ellipse at 20% 10%, #EDE5D8 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 90%, #E8D9C4 0%, transparent 60%);
+    color: var(--mocha);
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     min-height: 100vh;
     margin: 0;
-    padding: 20px;
-    box-sizing: border-box;
+    padding: 24px 16px 60px;
 }
 
+/* Subtle paper grain overlay */
+.grain-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 999;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+}
+
+/* ── App Container ────────────────────────────────────────── */
 .app-container {
-    text-align: center;
-    background: #ffffff;
-    padding: 30px;
-    border-radius: 24px;
-    box-shadow: 0 10px 30px rgba(74, 63, 53, 0.1);
-    max-width: 600px;
     width: 100%;
+    max-width: 540px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
 }
 
-.header-titles {
-    margin-bottom: 20px;
+/* ── Header ───────────────────────────────────────────────── */
+.header {
+    text-align: center;
+    padding-top: 8px;
+}
+
+.header-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
 }
 
 h1 {
-    font-weight: 600;
+    font-family: 'Playfair Display', serif;
+    font-size: 2.6rem;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    margin: 0;
+    color: var(--mocha);
+    line-height: 1;
 }
 
-/* Camera Styling */
+.brand-mark {
+    color: var(--caramel);
+    font-size: 1rem;
+    opacity: 0.7;
+}
+
+.tagline {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--mocha-light);
+    margin: 6px 0 0;
+}
+
+/* ── Mode Selector ────────────────────────────────────────── */
+.mode-selector {
+    display: flex;
+    gap: 8px;
+    background: var(--cream);
+    padding: 5px;
+    border-radius: var(--radius-btn);
+    box-shadow: inset 0 1px 3px var(--shadow), 0 1px 0 rgba(255,255,255,0.8);
+}
+
+.mode-btn {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 20px;
+    border: none;
+    background: transparent;
+    color: var(--mocha-light);
+    font-family: 'Quicksand', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    border-radius: var(--radius-btn);
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.mode-btn .mode-icon {
+    font-size: 0.7rem;
+    letter-spacing: -1px;
+}
+
+.mode-btn.active {
+    background: var(--caramel);
+    color: white;
+    box-shadow: 0 2px 8px rgba(212, 163, 115, 0.5);
+}
+
+.mode-btn:hover:not(.active) {
+    color: var(--mocha);
+    background: rgba(212,163,115,0.1);
+}
+
+/* ── Camera ───────────────────────────────────────────────── */
+.camera-wrapper {
+    width: 100%;
+    padding: 10px;
+    background: var(--warm-white);
+    border-radius: 22px;
+    box-shadow:
+        0 2px 0 #E0D5C6,
+        0 6px 24px var(--shadow),
+        0 20px 40px rgba(74,63,53,0.06);
+}
+
 .camera-section {
     position: relative;
     width: 100%;
-    max-width: 500px;
-    margin: 0 auto;
-    border-radius: 16px;
+    border-radius: 14px;
     overflow: hidden;
-    background: #EAE6DF;
-    line-height: 0; /* Removes gap below video */
+    background: #2A1F15;
+    aspect-ratio: 4/3;
+    line-height: 0;
 }
 
 #camera-feed {
     width: 100%;
+    height: 100%;
+    object-fit: cover;
     display: block;
-    transform: scaleX(-1); /* Mirror the camera */
+    transform: scaleX(-1);
+    transition: filter 0.4s ease;
 }
 
-/* Buttons */
+/* Filters applied to video */
+#camera-feed.filter-warm   { filter: saturate(1.2) sepia(0.25) brightness(1.05); }
+#camera-feed.filter-cool   { filter: saturate(0.9) hue-rotate(20deg) brightness(1.05); }
+#camera-feed.filter-mono   { filter: grayscale(1) contrast(1.05); }
+#camera-feed.filter-fade   { filter: saturate(0.6) brightness(1.1) contrast(0.85); }
+
+/* Viewfinder corners */
+.vf-corner {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    z-index: 3;
+    opacity: 0.6;
+}
+.vf-tl { top: 10px; left: 10px;  border-top: 2px solid rgba(255,255,255,0.7); border-left: 2px solid rgba(255,255,255,0.7); border-radius: 2px 0 0 0; }
+.vf-tr { top: 10px; right: 10px; border-top: 2px solid rgba(255,255,255,0.7); border-right: 2px solid rgba(255,255,255,0.7); border-radius: 0 2px 0 0; }
+.vf-bl { bottom: 10px; left: 10px;  border-bottom: 2px solid rgba(255,255,255,0.7); border-left: 2px solid rgba(255,255,255,0.7); border-radius: 0 0 0 2px; }
+.vf-br { bottom: 10px; right: 10px; border-bottom: 2px solid rgba(255,255,255,0.7); border-right: 2px solid rgba(255,255,255,0.7); border-radius: 0 0 2px 0; }
+
+/* Countdown */
+.countdown-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+.countdown-overlay.active { opacity: 1; }
+
+#countdown-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 7rem;
+    color: white;
+    text-shadow: 0 0 40px rgba(0,0,0,0.6), 0 2px 8px rgba(0,0,0,0.4);
+    line-height: 1;
+    animation: countPulse 1s ease-out forwards;
+}
+
+@keyframes countPulse {
+    0%   { transform: scale(1.4); opacity: 0; }
+    20%  { transform: scale(1);   opacity: 1; }
+    80%  { transform: scale(1);   opacity: 1; }
+    100% { transform: scale(0.8); opacity: 0; }
+}
+
+/* Flash */
+.flash-overlay {
+    position: absolute;
+    inset: 0;
+    background: white;
+    z-index: 20;
+    opacity: 0;
+    pointer-events: none;
+    border-radius: 14px;
+}
+.flash-overlay.flash { animation: flashAnim 0.5s ease-out forwards; }
+@keyframes flashAnim {
+    0%   { opacity: 0.95; }
+    100% { opacity: 0; }
+}
+
+/* Strip progress dots */
+.strip-progress {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 5;
+}
+.dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid rgba(255,255,255,0.5);
+    transition: background 0.3s, transform 0.3s;
+}
+.dot.taken {
+    background: var(--caramel);
+    border-color: var(--caramel);
+    transform: scale(1.25);
+}
+.dot.current {
+    background: white;
+    border-color: white;
+}
+
+/* ── Filter Bar ───────────────────────────────────────────── */
+.filter-bar {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    padding: 6px 16px;
+    border-radius: 30px;
+    border: 1.5px solid transparent;
+    background: var(--cream);
+    color: var(--mocha-light);
+    font-family: 'Quicksand', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px var(--shadow);
+}
+.filter-btn:hover   { border-color: var(--caramel); color: var(--mocha); }
+.filter-btn.active  {
+    background: var(--mocha);
+    color: var(--cream);
+    border-color: var(--mocha);
+    box-shadow: 0 2px 8px rgba(74,63,53,0.25);
+}
+
+/* ── Controls ─────────────────────────────────────────────── */
 .controls {
-    margin-top: 20px;
     display: flex;
     justify-content: center;
-    gap: 15px;
 }
 
-button {
-    background-color: var(--accent-color);
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--caramel);
     color: white;
     border: none;
-    padding: 12px 24px;
-    font-size: 16px;
-    font-family: inherit;
-    font-weight: 600;
-    border-radius: 30px;
+    padding: 14px 36px;
+    font-size: 0.95rem;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border-radius: var(--radius-btn);
     cursor: pointer;
-    transition: background 0.3s ease, transform 0.1s ease;
+    transition: background 0.25s ease, transform 0.12s ease, box-shadow 0.25s ease;
+    box-shadow: 0 4px 16px rgba(212, 163, 115, 0.45), 0 1px 0 rgba(255,255,255,0.2) inset;
+}
+.btn-primary:hover  { background: var(--caramel-dk); box-shadow: 0 6px 20px rgba(212,163,115,0.5); }
+.btn-primary:active { transform: scale(0.96); }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+.btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    color: var(--mocha);
+    border: 1.5px solid rgba(74,63,53,0.25);
+    padding: 12px 24px;
+    font-size: 0.85rem;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 600;
+    border-radius: var(--radius-btn);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.btn-secondary:hover { background: var(--cream); border-color: var(--caramel); color: var(--caramel-dk); }
+.btn-secondary:active { transform: scale(0.96); }
+
+/* Shutter icon */
+.shutter-icon {
+    display: inline-block;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    border: 2.5px solid rgba(255,255,255,0.85);
+    background: rgba(255,255,255,0.25);
+    flex-shrink: 0;
 }
 
-button:hover {
-    background-color: #C08D5D;
-}
-
-button:active {
-    transform: scale(0.95);
-}
-
-/* Output Image - The Static CSS Polaroid Frame */
+/* ── Output Sections ──────────────────────────────────────── */
 .output-section {
+    width: 100%;
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    animation: fadeUp 0.5s ease forwards;
+}
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Polaroid */
+.polaroid {
+    background: #FFFDF9;
+    padding: 14px 14px 52px;
+    border-radius: 3px;
+    box-shadow:
+        0 1px 0 #E8E2D8,
+        0 4px 16px rgba(74,63,53,0.14),
+        0 20px 48px rgba(74,63,53,0.09),
+        -2px -2px 0 rgba(255,255,255,0.9);
+    max-width: 360px;
+    width: 100%;
+    transform: rotate(-0.6deg);
+    transition: transform 0.3s ease;
+}
+.polaroid:hover { transform: rotate(0deg) scale(1.01); }
+
+.polaroid img {
+    width: 100%;
+    display: block;
+    border-radius: 1px;
+}
+
+.polaroid-caption {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 10px 4px 0;
+}
+.polaroid-caption span {
+    font-size: 0.72rem;
+    color: var(--mocha-light);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+}
+.polaroid-caption em {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--caramel);
+    letter-spacing: 0.02em;
+}
+
+/* Output actions */
+.output-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
     justify-content: center;
 }
 
-#final-photo {
-    margin-top: 30px;
+/* ── Film Strip ───────────────────────────────────────────── */
+.film-strip {
+    display: flex;
+    align-items: stretch;
+    background: var(--film-dark);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(20,12,6,0.35), 0 2px 0 rgba(255,255,255,0.05) inset;
+    max-width: 500px;
     width: 100%;
-    max-width: 400px;
-    
-    /* The Polaroid Frame Effect */
-    background-color: #ffffff;
-    padding: 15px 15px 60px 15px;
-    border-radius: 4px;
-    box-shadow: 0 8px 25px rgba(74, 63, 53, 0.15);
-    box-sizing: border-box;
 }
 
-/* --- THE MAGIC PRINT CSS --- */
+.film-holes {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding: 10px 6px;
+    gap: 6px;
+    flex-shrink: 0;
+}
+.film-holes span {
+    display: block;
+    width: 10px; height: 10px;
+    border-radius: 2px;
+    background: #0C0806;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.8), 0 1px 0 rgba(255,255,255,0.04);
+}
+
+.strip-frames {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 12px 0;
+    gap: 8px;
+}
+
+.strip-frame {
+    background: #111;
+    overflow: hidden;
+    flex: 1;
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.strip-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.strip-frame.empty {
+    background: repeating-linear-gradient(
+        45deg,
+        #1a1410,
+        #1a1410 4px,
+        #0d0a07 4px,
+        #0d0a07 8px
+    );
+}
+
+/* ── Print Styles ─────────────────────────────────────────── */
 @media print {
-    body {
-        background-color: white;
-        padding: 0;
-    }
-    
-    /* Hide the UI, buttons, and camera feed */
-    .app-container {
+    body { background: white; padding: 0; }
+    .grain-overlay, .header, .mode-selector, .camera-wrapper,
+    .filter-bar, .controls, .output-actions { display: none !important; }
+
+    .app-container { max-width: 100%; }
+
+    .polaroid {
+        transform: none;
         box-shadow: none;
-        padding: 0;
-    }
-    .header-titles, .camera-section, .controls {
-        display: none !important;
+        border: 1px solid #DDD;
+        margin: 20px auto;
+        max-width: 380px;
     }
 
-    /* Force the final image to display cleanly for printing */
-    #final-photo {
-        display: block !important;
-        position: absolute;
-        top: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 90vw;
-        max-width: 500px; /* Adjust if you want it larger on paper */
-        box-shadow: none; /* Printers don't need shadows */
-        border: 1px solid #eee; /* Light border just for paper clarity */
-        margin: 0;
+    .film-strip {
+        margin: 20px auto;
+        box-shadow: none;
+        max-width: 480px;
     }
+}
+
+/* ── Responsive ───────────────────────────────────────────── */
+@media (max-width: 480px) {
+    h1 { font-size: 2rem; }
+    .btn-primary { padding: 13px 28px; font-size: 0.88rem; }
+    .polaroid { padding: 10px 10px 44px; transform: none; }
+    .output-actions { gap: 8px; }
+    .btn-secondary { padding: 10px 18px; font-size: 0.8rem; }
 }
