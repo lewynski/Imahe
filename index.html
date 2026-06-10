@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cozy Photobooth</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <h1>Imahe</h1>
+        
+        <div class="camera-section">
+            <video id="camera-feed" autoplay playsinline></video>
+            <img src="assets/cozy-frame.png" class="frame-overlay" alt="frame">
+        </div>
+
+        <div class="controls">
+            <button id="capture-btn">Take Photo</button>
+            <button id="print-btn" style="display: none;">Print Photo</button>
+        </div>
+
+        <canvas id="canvas" style="display: none;"></canvas>
+
+        <div class="output-section">
+            <img id="final-photo" src="" alt="Your final photo" style="display: none;">
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
