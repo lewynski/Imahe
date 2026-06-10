@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Imahe Photobooth</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="grain-overlay"></div>
@@ -38,18 +38,14 @@
         <div class="camera-wrapper">
             <div class="camera-section">
                 <video id="camera-feed" autoplay playsinline></video>
-                <!-- Countdown overlay -->
                 <div class="countdown-overlay" id="countdown-overlay">
                     <span id="countdown-number"></span>
                 </div>
-                <!-- Flash overlay -->
                 <div class="flash-overlay" id="flash-overlay"></div>
-                <!-- Viewfinder corners -->
                 <div class="vf-corner vf-tl"></div>
                 <div class="vf-corner vf-tr"></div>
                 <div class="vf-corner vf-bl"></div>
                 <div class="vf-corner vf-br"></div>
-                <!-- Strip progress dots -->
                 <div class="strip-progress" id="strip-progress" style="display:none;">
                     <span class="dot" id="dot-0"></span>
                     <span class="dot" id="dot-1"></span>
@@ -59,12 +55,47 @@
         </div>
 
         <!-- Filter Row -->
-        <div class="filter-bar" id="filter-bar">
+        <div class="filter-bar">
             <button class="filter-btn active" data-filter="none">Normal</button>
             <button class="filter-btn" data-filter="warm">Warm</button>
             <button class="filter-btn" data-filter="cool">Cool</button>
             <button class="filter-btn" data-filter="mono">Mono</button>
             <button class="filter-btn" data-filter="fade">Fade</button>
+        </div>
+
+        <!-- Frame Picker -->
+        <div class="frame-picker-section">
+            <p class="section-label">Frame Style</p>
+            <div class="frame-picker" id="frame-picker">
+                <button class="frame-opt" data-frame="none" title="No Frame">
+                    <div class="frame-preview fp-none"><div class="fp-photo"></div></div>
+                    <span>None</span>
+                </button>
+                <button class="frame-opt active" data-frame="polaroid" title="Classic Polaroid">
+                    <div class="frame-preview fp-polaroid"><div class="fp-photo"></div><div class="fp-bar"></div></div>
+                    <span>Polaroid</span>
+                </button>
+                <button class="frame-opt" data-frame="minimal" title="Minimal Border">
+                    <div class="frame-preview fp-minimal"><div class="fp-photo"></div></div>
+                    <span>Minimal</span>
+                </button>
+                <button class="frame-opt" data-frame="dark" title="Dark Room">
+                    <div class="frame-preview fp-dark"><div class="fp-photo"></div></div>
+                    <span>Dark Room</span>
+                </button>
+                <button class="frame-opt" data-frame="doodle" title="Doodle">
+                    <div class="frame-preview fp-doodle"><div class="fp-photo"></div></div>
+                    <span>Doodle</span>
+                </button>
+                <button class="frame-opt" data-frame="stamp" title="Postcard Stamp">
+                    <div class="frame-preview fp-stamp"><div class="fp-photo"></div><div class="fp-stamp-bar"></div></div>
+                    <span>Postcard</span>
+                </button>
+                <button class="frame-opt" data-frame="vintage" title="Vintage Date">
+                    <div class="frame-preview fp-vintage"><div class="fp-photo"></div><div class="fp-vintage-strip"></div></div>
+                    <span>Vintage</span>
+                </button>
+            </div>
         </div>
 
         <!-- Controls -->
@@ -79,13 +110,7 @@
 
         <!-- Output: Single Photo -->
         <div class="output-section" id="output-single" style="display:none;">
-            <div class="polaroid" id="polaroid-frame">
-                <img id="final-photo" src="" alt="Your captured photo">
-                <div class="polaroid-caption">
-                    <span id="photo-date"></span>
-                    <em>imahe</em>
-                </div>
-            </div>
+            <div id="single-frame-container"></div>
             <div class="output-actions">
                 <button class="btn-secondary" id="retake-btn">Retake</button>
                 <button class="btn-primary" id="download-btn">Save Photo</button>
@@ -95,15 +120,7 @@
 
         <!-- Output: Film Strip -->
         <div class="output-section" id="output-strip" style="display:none;">
-            <div class="film-strip" id="film-strip">
-                <div class="film-holes left">
-                    <span></span><span></span><span></span><span></span><span></span><span></span>
-                </div>
-                <div class="strip-frames" id="strip-frames"></div>
-                <div class="film-holes right">
-                    <span></span><span></span><span></span><span></span><span></span><span></span>
-                </div>
-            </div>
+            <div id="strip-frame-container"></div>
             <div class="output-actions">
                 <button class="btn-secondary" id="strip-retake-btn">Retake Strip</button>
                 <button class="btn-primary" id="strip-download-btn">Save Strip</button>
