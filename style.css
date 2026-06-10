@@ -13,6 +13,8 @@ body {
     align-items: center;
     min-height: 100vh;
     margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .app-container {
@@ -22,15 +24,18 @@ body {
     border-radius: 24px;
     box-shadow: 0 10px 30px rgba(74, 63, 53, 0.1);
     max-width: 600px;
-    width: 90%;
+    width: 100%;
+}
+
+.header-titles {
+    margin-bottom: 20px;
 }
 
 h1 {
     font-weight: 600;
-    margin-bottom: 20px;
 }
 
-/* Camera & Frame Styling */
+/* Camera Styling */
 .camera-section {
     position: relative;
     width: 100%;
@@ -39,22 +44,13 @@ h1 {
     border-radius: 16px;
     overflow: hidden;
     background: #EAE6DF;
+    line-height: 0; /* Removes gap below video */
 }
 
 #camera-feed {
     width: 100%;
     display: block;
     transform: scaleX(-1); /* Mirror the camera */
-}
-
-.frame-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none; /* Lets clicks pass through to the video */
-    z-index: 2;
 }
 
 /* Buttons */
@@ -86,19 +82,30 @@ button:active {
     transform: scale(0.95);
 }
 
-/* Output Image */
+/* Output Image - The Static CSS Polaroid Frame */
+.output-section {
+    display: flex;
+    justify-content: center;
+}
+
 #final-photo {
-    margin-top: 20px;
+    margin-top: 30px;
     width: 100%;
-    max-width: 500px;
-    border-radius: 16px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    max-width: 400px;
+    
+    /* The Polaroid Frame Effect */
+    background-color: #ffffff;
+    padding: 15px 15px 60px 15px;
+    border-radius: 4px;
+    box-shadow: 0 8px 25px rgba(74, 63, 53, 0.15);
+    box-sizing: border-box;
 }
 
 /* --- THE MAGIC PRINT CSS --- */
 @media print {
     body {
         background-color: white;
+        padding: 0;
     }
     
     /* Hide the UI, buttons, and camera feed */
@@ -106,22 +113,21 @@ button:active {
         box-shadow: none;
         padding: 0;
     }
-    h1, .camera-section, .controls {
+    .header-titles, .camera-section, .controls {
         display: none !important;
     }
 
-    /* Force the final image to take up the whole page */
+    /* Force the final image to display cleanly for printing */
     #final-photo {
         display: block !important;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        max-width: none;
-        height: 100vh;
-        object-fit: contain; /* Prevents stretching */
-        box-shadow: none;
+        position: absolute;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90vw;
+        max-width: 500px; /* Adjust if you want it larger on paper */
+        box-shadow: none; /* Printers don't need shadows */
+        border: 1px solid #eee; /* Light border just for paper clarity */
         margin: 0;
-        border-radius: 0;
     }
 }
