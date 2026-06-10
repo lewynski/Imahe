@@ -16,7 +16,7 @@ async function startCamera() {
     }
 }
 
-// 2. Capture and Composite Image
+// 2. Capture Image
 captureBtn.addEventListener('click', () => {
     // Set canvas dimensions to match the video
     canvas.width = video.videoWidth;
@@ -26,31 +26,19 @@ captureBtn.addEventListener('click', () => {
     ctx.translate(canvas.width, 0);
     ctx.scale(-1, 1);
     
-    // Draw the video frame
+    // Draw the video frame onto the canvas
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-    // Reset the transform so the frame doesn't get drawn backwards
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-
-    // Load and draw the frame overlay
-    const frameImg = new Image();
-    frameImg.src = 'assets/cozy-frame.png'; 
+    // Convert canvas directly to an image URL
+    const dataUrl = canvas.toDataURL('image/png');
+    finalPhoto.src = dataUrl;
     
-    // Make sure the frame is loaded before drawing it
-    frameImg.onload = () => {
-        ctx.drawImage(frameImg, 0, 0, canvas.width, canvas.height);
-        
-        // Convert canvas to a printable image URL
-        const dataUrl = canvas.toDataURL('image/png');
-        finalPhoto.src = dataUrl;
-        
-        // Show the output image and print button
-        finalPhoto.style.display = 'block';
-        printBtn.style.display = 'inline-block';
-        
-        // Optional: Scroll down to the result
-        finalPhoto.scrollIntoView({ behavior: 'smooth' });
-    };
+    // Show the output image and print button
+    finalPhoto.style.display = 'block';
+    printBtn.style.display = 'inline-block';
+    
+    // Smoothly scroll down to the result
+    finalPhoto.scrollIntoView({ behavior: 'smooth' });
 });
 
 // 3. Trigger Print
