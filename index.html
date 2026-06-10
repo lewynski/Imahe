@@ -12,7 +12,6 @@
 
     <div class="app-container">
 
-        <!-- Header -->
         <header class="header">
             <div class="header-brand">
                 <span class="brand-mark">✦</span>
@@ -22,7 +21,6 @@
             <p class="tagline">capture your cozy moments</p>
         </header>
 
-        <!-- Mode Selector -->
         <div class="mode-selector">
             <button class="mode-btn active" data-mode="single">
                 <span class="mode-icon">⬜</span>
@@ -34,7 +32,6 @@
             </button>
         </div>
 
-        <!-- Shot Count (strip only) -->
         <div class="shot-count-row" id="shot-count-row" style="display:none;">
             <p class="section-label" style="margin:0 10px 0 0;">Shots</p>
             <div class="shot-count-picker">
@@ -60,7 +57,6 @@
             </div>
         </div>
 
-        <!-- Camera Section -->
         <div class="camera-wrapper">
             <div class="camera-section">
                 <video id="camera-feed" autoplay playsinline></video>
@@ -76,7 +72,6 @@
             </div>
         </div>
 
-        <!-- Filter Row -->
         <div class="filter-bar">
             <button class="filter-btn active" data-filter="none">Normal</button>
             <button class="filter-btn" data-filter="warm">Warm</button>
@@ -85,7 +80,6 @@
             <button class="filter-btn" data-filter="fade">Fade</button>
         </div>
 
-        <!-- Frame Picker -->
         <div class="frame-picker-section">
             <p class="section-label">Frame Style</p>
             <div class="frame-picker" id="frame-picker">
@@ -120,7 +114,6 @@
             </div>
         </div>
 
-        <!-- Controls -->
         <div class="controls">
             <button id="capture-btn" class="btn-primary">
                 <span class="shutter-icon"></span>
@@ -130,7 +123,6 @@
 
         <canvas id="canvas" style="display:none;"></canvas>
 
-        <!-- Output: Single -->
         <div class="output-section" id="output-single" style="display:none;">
             <div id="single-frame-container"></div>
             <div class="output-actions">
@@ -140,7 +132,6 @@
             </div>
         </div>
 
-        <!-- Output: Strip -->
         <div class="output-section" id="output-strip" style="display:none;">
             <div id="strip-frame-container"></div>
             <div class="output-actions">
@@ -152,7 +143,7 @@
 
     </div>
 
- <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-<script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
