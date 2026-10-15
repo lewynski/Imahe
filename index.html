@@ -1,149 +1,196 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Imahe Photobooth</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IMAHE — Studio Photobooth</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="grain-overlay"></div>
+  <div class="app-shell">
+    <!-- Top Navigation Bar -->
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-dot"></span>
+        <span class="brand-name">IMAHE</span>
+        <span class="brand-tag">STUDIO BOOTH</span>
+      </div>
+      <div class="session-status" id="sessionStatus">READY TO CAPTURE</div>
+    </header>
 
-    <div class="app-container">
-
-        <header class="header">
-            <div class="header-brand">
-                <span class="brand-mark">✦</span>
-                <h1>Imahe</h1>
-                <span class="brand-mark">✦</span>
+    <!-- Main Workspace -->
+    <main class="workspace">
+      <!-- Left Column: Camera Stage & Controls -->
+      <section class="stage-column">
+        <div class="viewfinder-wrapper">
+          <div class="viewfinder" id="viewfinder">
+            <video id="video" autoplay playsinline muted></video>
+            
+            <!-- Subtle Rule of Thirds Grid -->
+            <div class="grid-overlay" id="gridOverlay">
+              <div></div><div></div><div></div>
+              <div></div><div></div><div></div>
+              <div></div><div></div><div></div>
             </div>
-            <p class="tagline">capture your cozy moments</p>
-        </header>
 
-        <div class="mode-selector">
-            <button class="mode-btn active" data-mode="single">
-                <span class="mode-icon">⬜</span>
-                <span>Single</span>
+            <!-- Countdown Display -->
+            <div class="countdown-overlay" id="countdownOverlay">
+              <span id="countdownNumber">8</span>
+            </div>
+
+            <!-- Studio Flash Effect -->
+            <div class="flash-overlay" id="flashOverlay"></div>
+
+            <!-- Top HUD inside Camera -->
+            <div class="camera-hud-top">
+              <span class="hud-badge" id="resolutionBadge">HD 1080P</span>
+              <span class="hud-badge" id="shotCounter">0 / 4 SHOTS</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Primary Controls Bar -->
+        <div class="control-dock">
+          <div class="control-group">
+            <label class="control-label">Pose Layout</label>
+            <div class="segmented-control" id="shotCountSelect">
+              <button type="button" class="seg-btn" data-shots="1">1 Pose</button>
+              <button type="button" class="seg-btn" data-shots="3">3 Strip</button>
+              <button type="button" class="seg-btn active" data-shots="4">4 Classic</button>
+            </div>
+          </div>
+
+          <div class="shutter-group">
+            <button type="button" class="icon-btn active" id="mirrorBtn" title="Mirror Camera">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M12 3v18M8 7l-5 5 5 5M16 7l5 5-5 5"/>
+              </svg>
+              <span>Mirror</span>
             </button>
-            <button class="mode-btn" data-mode="strip">
-                <span class="mode-icon">⬛⬛⬛</span>
-                <span>Film Strip</span>
+
+            <button type="button" class="shutter-btn" id="startBtn">
+              <span class="shutter-ring"></span>
+              <span class="shutter-core">START 8s BOOTH</span>
             </button>
-        </div>
 
-        <div class="shot-count-row" id="shot-count-row" style="display:none;">
-            <p class="section-label" style="margin:0 10px 0 0;">Shots</p>
-            <div class="shot-count-picker">
-                <button class="shot-btn active" data-count="3">
-                    <span class="shot-visual">
-                        <span></span><span></span><span></span>
-                    </span>
-                    <span class="shot-label">3</span>
-                </button>
-                <button class="shot-btn" data-count="4">
-                    <span class="shot-visual">
-                        <span></span><span></span><span></span><span></span>
-                    </span>
-                    <span class="shot-label">4</span>
-                </button>
-                <button class="shot-btn" data-count="6">
-                    <span class="shot-visual six">
-                        <span></span><span></span><span></span>
-                        <span></span><span></span><span></span>
-                    </span>
-                    <span class="shot-label">6</span>
-                </button>
-            </div>
-        </div>
-
-        <div class="camera-wrapper">
-            <div class="camera-section">
-                <video id="camera-feed" autoplay playsinline></video>
-                <div class="countdown-overlay" id="countdown-overlay">
-                    <span id="countdown-number"></span>
-                </div>
-                <div class="flash-overlay" id="flash-overlay"></div>
-                <div class="vf-corner vf-tl"></div>
-                <div class="vf-corner vf-tr"></div>
-                <div class="vf-corner vf-bl"></div>
-                <div class="vf-corner vf-br"></div>
-                <div class="strip-progress" id="strip-progress" style="display:none;"></div>
-            </div>
-        </div>
-
-        <div class="filter-bar">
-            <button class="filter-btn active" data-filter="none">Normal</button>
-            <button class="filter-btn" data-filter="warm">Warm</button>
-            <button class="filter-btn" data-filter="cool">Cool</button>
-            <button class="filter-btn" data-filter="mono">Mono</button>
-            <button class="filter-btn" data-filter="fade">Fade</button>
-        </div>
-
-        <div class="frame-picker-section">
-            <p class="section-label">Frame Style</p>
-            <div class="frame-picker" id="frame-picker">
-                <button class="frame-opt" data-frame="none" title="No Frame">
-                    <div class="frame-preview fp-none"><div class="fp-photo"></div></div>
-                    <span>None</span>
-                </button>
-                <button class="frame-opt active" data-frame="polaroid" title="Classic Polaroid">
-                    <div class="frame-preview fp-polaroid"><div class="fp-photo"></div><div class="fp-bar"></div></div>
-                    <span>Polaroid</span>
-                </button>
-                <button class="frame-opt" data-frame="minimal" title="Minimal Border">
-                    <div class="frame-preview fp-minimal"><div class="fp-photo"></div></div>
-                    <span>Minimal</span>
-                </button>
-                <button class="frame-opt" data-frame="dark" title="Dark Room">
-                    <div class="frame-preview fp-dark"><div class="fp-photo"></div></div>
-                    <span>Dark Room</span>
-                </button>
-                <button class="frame-opt" data-frame="doodle" title="Doodle">
-                    <div class="frame-preview fp-doodle"><div class="fp-photo"></div></div>
-                    <span>Doodle</span>
-                </button>
-                <button class="frame-opt" data-frame="stamp" title="Postcard Stamp">
-                    <div class="frame-preview fp-stamp"><div class="fp-photo"></div><div class="fp-stamp-bar"></div></div>
-                    <span>Postcard</span>
-                </button>
-                <button class="frame-opt" data-frame="vintage" title="Vintage Date">
-                    <div class="frame-preview fp-vintage"><div class="fp-photo"></div><div class="fp-vintage-strip"></div></div>
-                    <span>Vintage</span>
-                </button>
-            </div>
-        </div>
-
-        <div class="controls">
-            <button id="capture-btn" class="btn-primary">
-                <span class="shutter-icon"></span>
-                <span id="btn-label">Take Photo</span>
+            <button type="button" class="icon-btn" id="gridBtn" title="Toggle Grid">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                <path d="M3 9h18M3 15h18M9 3v18M15 3v18"/>
+              </svg>
+              <span>Grid</span>
             </button>
-        </div>
+          </div>
 
-        <canvas id="canvas" style="display:none;"></canvas>
-
-        <div class="output-section" id="output-single" style="display:none;">
-            <div id="single-frame-container"></div>
-            <div class="output-actions">
-                <button class="btn-secondary" id="retake-btn">Retake</button>
-                <button class="btn-primary" id="download-btn">Save Photo</button>
-                <button class="btn-secondary" id="print-btn">Print</button>
+          <div class="control-group">
+            <label class="control-label">Beauty Softness</label>
+            <div class=" segmented-control" id="softnessSelect">
+              <button type="button" class="seg-btn" data-soft="0">Crisp</button>
+              <button type="button" class="seg-btn active" data-soft="1">Studio</button>
             </div>
+          </div>
         </div>
 
-        <div class="output-section" id="output-strip" style="display:none;">
-            <div id="strip-frame-container"></div>
-            <div class="output-actions">
-                <button class="btn-secondary" id="strip-retake-btn">Retake Strip</button>
-                <button class="btn-primary" id="strip-download-btn">Save Strip</button>
-                <button class="btn-secondary" id="strip-print-btn">Print</button>
+        <!-- Filter Selector -->
+        <div class="selector-panel">
+          <div class="panel-header">
+            <span class="panel-title">Optical Filters</span>
+            <span class="panel-sub" id="activeFilterName">Natural Studio</span>
+          </div>
+          <div class="pill-scroll" id="filterList">
+            <button type="button" class="pill-btn active" data-filter="natural">Natural Studio</button>
+            <button type="button" class="pill-btn" data-filter="bw">Classic Noir</button>
+            <button type="button" class="pill-btn" data-filter="warm">Golden Analog</button>
+            <button type="button" class="pill-btn" data-filter="cool">Cinema Cool</button>
+            <button type="button" class="pill-btn" data-filter="rose">Soft Rose</button>
+            <button type="button" class="pill-btn" data-filter="vintage">90s Retro</button>
+            <button type="button" class="pill-btn" data-filter="dramatic">High Contrast</button>
+            <button type="button" class="pill-btn" data-filter="fade">Matte Editorial</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Column: Live Photostrip & Customization -->
+      <aside class="strip-column">
+        <div class="strip-card">
+          <div class="strip-card-header">
+            <span class="panel-title">Print Preview</span>
+            <button type="button" class="text-btn" id="retakeBtn" disabled>Reset Strip</button>
+          </div>
+
+          <!-- Canvas Output -->
+          <div class="canvas-stage">
+            <canvas id="stripCanvas"></canvas>
+          </div>
+
+          <!-- Frame Customization -->
+          <div class="customization-area">
+            <div class="panel-header">
+              <span class="panel-title">Frame Design</span>
             </div>
+            <div class="frame-swatches" id="frameList">
+              <button type="button" class="swatch-btn active" data-frame="white" title="Gallery White">
+                <span class="swatch-color" style="background: #ffffff; border: 1px solid #d4d4d8;"></span>
+                <span class="swatch-label">White</span>
+              </button>
+              <button type="button" class="swatch-btn" data-frame="obsidian" title="Obsidian Black">
+                <span class="swatch-color" style="background: #141417;"></span>
+                <span class="swatch-label">Noir</span>
+              </button>
+              <button type="button" class="swatch-btn" data-frame="cream" title="Warm Editorial Cream">
+                <span class="swatch-color" style="background: #f4efe6;"></span>
+                <span class="swatch-label">Cream</span>
+              </button>
+              <button type="button" class="swatch-btn" data-frame="blush" title="Pastel Blush">
+                <span class="swatch-color" style="background: #f9e2e6;"></span>
+                <span class="swatch-label">Blush</span>
+              </button>
+              <button type="button" class="swatch-btn" data-frame="matcha" title="Sage Matcha">
+                <span class="swatch-color" style="background: #e2ece4;"></span>
+                <span class="swatch-label">Sage</span>
+              </button>
+              <button type="button" class="swatch-btn" data-frame="cobalt" title="Midnight Cobalt">
+                <span class="swatch-color" style="background: #172554;"></span>
+                <span class="swatch-label">Cobalt</span>
+              </button>
+              <button type="button" class="swatch-btn" data-frame="film" title="35mm Film Strip">
+                <span class="swatch-color" style="background: linear-gradient(135deg, #18181b 50%, #52525b 50%);"></span>
+                <span class="swatch-label">35mm</span>
+              </button>
+            </div>
+
+            <div class="caption-group">
+              <div class="input-field">
+                <label for="captionInput">Custom Strip Caption</label>
+                <input type="text" id="captionInput" maxlength="28" placeholder="IMAHE STUDIO" value="IMAHE STUDIO">
+              </div>
+              <label class="checkbox-label">
+                <input type="checkbox" id="dateToggle" checked>
+                <span>Date Stamp</span>
+              </label>
+            </div>
+
+            <button type="button" class="download-btn" id="downloadBtn" disabled>
+              Download High-Res Strip
+            </button>
+          </div>
         </div>
+      </aside>
+    </main>
 
-    </div>
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-inner">
+        <span class="footer-brand">IMAHE PHOTOBOOTH</span>
+        <span class="footer-divider"></span>
+        <span class="footer-dev">Dev: Jon Lewyn Tanggaro</span>
+      </div>
+    </footer>
+  </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
